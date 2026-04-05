@@ -1,0 +1,116 @@
+:root {
+  color-scheme: dark;
+  font-family: Inter, system-ui, -apple-system, Segoe UI, Roboto, sans-serif;
+  --bg: #0b1220;
+  --card: #111a2d;
+  --line: #334155;
+  --text: #dbeafe;
+  --muted: #94a3b8;
+  --accent: #38bdf8;
+}
+
+* { box-sizing: border-box; }
+body {
+  margin: 0;
+  background: radial-gradient(circle at 20% 20%, #1e293b 0%, var(--bg) 45%);
+  color: var(--text);
+  min-height: 100vh;
+}
+
+.layout {
+  max-width: 1100px;
+  margin: 24px auto;
+  padding: 0 16px;
+  display: grid;
+  grid-template-columns: 1.2fr 1fr;
+  gap: 16px;
+}
+.card {
+  background: color-mix(in oklab, var(--card), black 10%);
+  border: 1px solid var(--line);
+  border-radius: 14px;
+  padding: 16px;
+}
+.muted { color: var(--muted); }
+.messages {
+  min-height: 360px;
+  max-height: 58vh;
+  overflow: auto;
+  margin: 16px 0;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+.msg {
+  border: 1px solid var(--line);
+  border-radius: 10px;
+  padding: 10px;
+  line-height: 1.4;
+}
+.msg.user { border-color: color-mix(in oklab, var(--accent), black 35%); }
+.composer {
+  display: flex;
+  gap: 10px;
+}
+.composer input {
+  flex: 1;
+  border-radius: 10px;
+  border: 1px solid var(--line);
+  background: #0f172a;
+  color: var(--text);
+  padding: 10px;
+}
+.composer button {
+  border: none;
+  border-radius: 10px;
+  background: var(--accent);
+  color: #0f172a;
+  font-weight: 700;
+  padding: 0 16px;
+  cursor: pointer;
+}
+.agents-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+.badge {
+  font-size: 12px;
+  color: #7dd3fc;
+  border: 1px solid #0369a1;
+  border-radius: 100px;
+  padding: 4px 8px;
+}
+.agent-list {
+  list-style: none;
+  margin: 12px 0 0;
+  padding: 0;
+  display: grid;
+  gap: 10px;
+}
+.agent {
+  border: 1px solid var(--line);
+  border-radius: 10px;
+  padding: 10px;
+}
+.agent .top {
+  display: flex;
+  justify-content: space-between;
+}
+.progress {
+  margin-top: 8px;
+  height: 8px;
+  width: 100%;
+  border-radius: 999px;
+  background: #0f172a;
+  overflow: hidden;
+}
+.progress > span {
+  display: block;
+  height: 100%;
+  background: linear-gradient(to right, #0ea5e9, #22d3ee);
+}
+
+@media (max-width: 900px) {
+  .layout { grid-template-columns: 1fr; }
+}

@@ -1,0 +1,32 @@
+<!doctype html>
+<html lang="zh-CN">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Claw WorkBuddy</title>
+    <link rel="stylesheet" href="/styles.css" />
+  </head>
+  <body>
+    <main class="layout">
+      <section class="chat-panel card">
+        <h1>Claw WorkBuddy</h1>
+        <p class="muted">在浏览器与 claw-code 聊天，并实时观察 subagent 状态。</p>
+        <div id="messages" class="messages"></div>
+        <form id="chat-form" class="composer">
+          <input id="chat-input" placeholder="输入你的任务，例如：帮我重构查询模块" autocomplete="off" />
+          <button type="submit">发送</button>
+        </form>
+      </section>
+
+      <section class="agents-panel card">
+        <div class="agents-header">
+          <h2>Subagent Monitor</h2>
+          <span id="stream-state" class="badge">连接中...</span>
+        </div>
+        <ul id="subagent-list" class="agent-list"></ul>
+      </section>
+    </main>
+
+    <script src="/app.js" defer></script>
+  </body>
+</html>

@@ -129,6 +129,14 @@ Run verification:
 python3 -m unittest discover -s tests -v
 ```
 
+Run browser chat + subagent monitor UI:
+
+```bash
+python3 -m src.main web-ui --host 127.0.0.1 --port 8080
+```
+
+Then open `http://127.0.0.1:8080` in your browser.
+
 Run the parity audit against the local ignored archive (when present):
 
 ```bash

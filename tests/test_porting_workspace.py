@@ -243,6 +243,22 @@ class PortingWorkspaceTests(unittest.TestCase):
         self.assertIn('mode=direct-connect', direct_result.stdout)
         self.assertIn('mode=deep-link', deep_link_result.stdout)
 
+    def test_web_assets_exist(self) -> None:
+        self.assertTrue(Path('src/web/index.html').exists())
+        self.assertTrue(Path('src/web/styles.css').exists())
+        self.assertTrue(Path('src/web/app.js').exists())
+
+    def test_web_frontend_registry_cycle(self) -> None:
+        from src.web_frontend import SubagentRegistry
+
+        registry = SubagentRegistry()
+        initial = registry.snapshot()
+        self.assertGreaterEqual(len(initial), 3)
+        updated = registry.apply_prompt('refactor chat monitor')
+        self.assertEqual(updated[0]['status'], 'working')
+        completed = registry.complete_cycle()
+        self.assertTrue(all(item['status'] == 'done' for item in completed))
+
 
 if __name__ == '__main__':
     unittest.main()
