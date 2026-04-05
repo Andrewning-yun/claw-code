@@ -7,10 +7,12 @@ let messages = {};
 let agents = [];
 let selectedAgent = null;
 let eventSource = null;
+let apiBaseUrl = localStorage.getItem('apiBaseUrl') || window.location.origin;
 
 // ==================== 初始化 ====================
 
 document.addEventListener('DOMContentLoaded', async () => {
+    initializeServerConnection();
     loadFromStorage();
     if (topics.length === 0) {
         createNewTopic('默认对话');
@@ -27,14 +29,69 @@ document.addEventListener('DOMContentLoaded', async () => {
     startSSE();
 });
 
+function normalizeBaseUrl(value) {
+    if (!value || !value.trim()) return window.location.origin;
+    return value.trim().replace(/\/+$/, '');
+}
+
+function buildApiUrl(path) {
+    const normalizedPath = path.startsWith('/') ? path : `/${path}`;
+    return `${apiBaseUrl}${normalizedPath}`;
+}
+
+async function apiFetch(path, options) {
+    return fetch(buildApiUrl(path), options);
+}
+
+function initializeServerConnection() {
+    apiBaseUrl = normalizeBaseUrl(localStorage.getItem('apiBaseUrl') || window.location.origin);
+    const input = document.getElementById('serverUrlInput');
+    if (input) {
+        input.value = apiBaseUrl;
+    }
+    updateServerStatus('未连接', '');
+}
+
+function updateServerStatus(text, type = '') {
+    const status = document.getElementById('serverStatus');
+    if (!status) return;
+    status.textContent = text;
+    status.className = `server-status ${type}`.trim();
+}
+
+async function connectServer() {
+    const input = document.getElementById('serverUrlInput');
+    if (!input) return;
+    
+    apiBaseUrl = normalizeBaseUrl(input.value);
+    localStorage.setItem('apiBaseUrl', apiBaseUrl);
+    updateServerStatus('连接中...', '');
+    
+    try {
+        const response = await apiFetch('/api/agents');
+        if (!response.ok) {
+            throw new Error(`HTTP ${response.status}`);
+        }
+        
+        updateServerStatus('已连接', 'connected');
+        await loadAgents();
+        startSSE();
+    } catch (error) {
+        console.error('连接服务器失败:', error);
+        updateServerStatus('连接失败', 'error');
+        alert(`连接失败，请检查服务地址或服务是否启动。\n当前地址: ${apiBaseUrl}`);
+    }
+}
+
 // ==================== Agent 管理 ====================
 
 async function loadAgents() {
     try {
-        const response = await fetch('/api/agents');
+        const response = await apiFetch('/api/agents');
         const data = await response.json();
         agents = data.agents || [];
         renderAgentsList();
+        updateServerStatus('已连接', 'connected');
         
         // 如果有选中的 agent，更新详情面板
         if (selectedAgent) {
@@ -45,6 +102,7 @@ async function loadAgents() {
         }
     } catch (error) {
         console.error('加载 agents 失败:', error);
+        updateServerStatus('连接失败', 'error');
     }
 }
 
@@ -81,7 +139,7 @@ function getStatusText(status) {
 
 async function showAgentDetail(agentId) {
     try {
-        const response = await fetch(`/api/agents/${agentId}`);
+        const response = await apiFetch(`/api/agents/${agentId}`);
         const agent = await response.json();
         
         selectedAgent = agent;
@@ -158,7 +216,7 @@ async function runAgentWithTask() {
     }
     
     try {
-        const response = await fetch(`/api/agents/${selectedAgent.id}/run`, {
+        const response = await apiFetch(`/api/agents/${selectedAgent.id}/run`, {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',
@@ -185,7 +243,7 @@ async function stopCurrentAgent() {
     if (!selectedAgent || selectedAgent.status !== 'running') return;
     
     try {
-        const response = await fetch(`/api/agents/${selectedAgent.id}/stop`, {
+        const response = await apiFetch(`/api/agents/${selectedAgent.id}/stop`, {
             method: 'POST'
         });
         
@@ -206,7 +264,7 @@ function startSSE() {
         eventSource.close();
     }
     
-    eventSource = new EventSource('/api/events');
+    eventSource = new EventSource(buildApiUrl('/api/events'));
     
     eventSource.onmessage = async (event) => {
         try {
@@ -233,6 +291,7 @@ function startSSE() {
     };
     
     eventSource.onerror = () => {
+        updateServerStatus('连接中断', 'error');
         console.log('SSE 连接断开，尝试重连...');
         setTimeout(() => {
             if (!eventSource || eventSource.readyState === EventSource.CLOSED) {
@@ -288,7 +347,7 @@ function selectTopic(topicId) {
 
 async function loadChatFromServer(topicId) {
     try {
-        const response = await fetch(`/api/chat/${topicId}`);
+        const response = await apiFetch(`/api/chat/${topicId}`);
         const data = await response.json();
         
         if (data.messages && data.messages.length > 0) {
@@ -388,7 +447,7 @@ async function sendMessage() {
     };
 
     try {
-        const response = await fetch('/api/chat', {
+        const response = await apiFetch('/api/chat', {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',

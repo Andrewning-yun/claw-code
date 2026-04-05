@@ -15,6 +15,11 @@
                     <h1>💬 对话</h1>
                 </div>
                 <div class="header-actions">
+                    <div class="server-connect">
+                        <input id="serverUrlInput" type="text" placeholder="服务器地址 (默认同源，如 http://127.0.0.1:8000)">
+                        <button class="btn-connect-server" onclick="connectServer()">连接</button>
+                        <span id="serverStatus" class="server-status">未连接</span>
+                    </div>
                     <button class="btn-new-chat" onclick="newChat()">+ 新对话</button>
                 </div>
             </div>
