@@ -1,27 +1,27 @@
 [
   {
-    "content": "Architecture & dependency analysis",
-    "activeForm": "Complete",
+    "content": "Create Python server with FastAPI",
+    "activeForm": "Creating Python server",
     "status": "completed"
   },
   {
-    "content": "Runtime crate deep analysis",
-    "activeForm": "Complete",
-    "status": "completed"
-  },
-  {
-    "content": "CLI & Tools analysis",
-    "activeForm": "Complete",
-    "status": "completed"
-  },
-  {
-    "content": "Code quality verification",
-    "activeForm": "Complete",
-    "status": "completed"
-  },
-  {
-    "content": "Synthesize findings into unified report",
-    "activeForm": "Writing report",
+    "content": "Update frontend HTML with agent sidebar",
+    "activeForm": "Updating frontend HTML",
     "status": "in_progress"
+  },
+  {
+    "content": "Update CSS styles for agent section",
+    "activeForm": "Updating CSS styles",
+    "status": "pending"
+  },
+  {
+    "content": "Update JavaScript to call real API",
+    "activeForm": "Updating JavaScript logic",
+    "status": "pending"
+  },
+  {
+    "content": "Test the integrated system",
+    "activeForm": "Testing the integration",
+    "status": "pending"
   }
 ]

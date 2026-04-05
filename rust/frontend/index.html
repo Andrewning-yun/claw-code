@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Claude Chat</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <div class="app-container">
+        <!-- 聊天区域 -->
+        <div class="chat-area">
+            <div class="chat-header">
+                <div class="header-info">
+                    <h1>💬 对话</h1>
+                </div>
+                <div class="header-actions">
+                    <button class="btn-new-chat" onclick="newChat()">+ 新对话</button>
+                </div>
+            </div>
+            
+            <div class="chat-messages" id="chatMessages">
+                <!-- 消息将动态添加到这里 -->
+            </div>
+            
+            <div class="chat-input-area">
+                <div class="input-controls">
+                    <label for="imageInput" class="image-btn" title="添加图片">
+                        📷
+                    </label>
+                    <input type="file" id="imageInput" accept="image/*" multiple onchange="handleImageUpload(event)">
+                </div>
+                <textarea 
+                    id="messageInput" 
+                    placeholder="输入消息... (Enter 发送, Shift+Enter 换行)"
+                    onkeydown="handleKeyDown(event)"
+                ></textarea>
+                <button class="send-btn" onclick="sendMessage()" id="sendBtn">发送</button>
+            </div>
+            
+            <!-- 图片预览区域 -->
+            <div class="image-preview-area" id="imagePreviewArea"></div>
+        </div>
+        
+        <!-- 右侧边栏容器 -->
+        <div class="right-sidebar">
+            <!-- Agent 列表 -->
+            <div class="agents-section">
+                <div class="section-header">
+                    <h2>🤖 Agents</h2>
+                    <span class="refresh-btn" onclick="loadAgents()" title="刷新">🔄</span>
+                </div>
+                <div class="agents-list" id="agentsList">
+                    <!-- Agent 列表将动态添加 -->
+                </div>
+            </div>
+            
+            <!-- 可视化区域 - 点击 agent 后显示其运行日志 -->
+            <div class="agent-detail-panel" id="agentDetailPanel">
+                <div class="agent-detail-header">
+                    <h3 id="agentDetailName">Agent 详情</h3>
+                    <button class="close-panel-btn" onclick="closeAgentDetail()">×</button>
+                </div>
+                <div class="agent-detail-status">
+                    <span class="status-badge" id="agentDetailStatus">idle</span>
+                    <span class="current-task" id="agentDetailTask">--</span>
+                </div>
+                <div class="agent-logs" id="agentLogs">
+                    <!-- 运行日志将显示在这里 -->
+                </div>
+                <div class="agent-actions">
+                    <button class="btn-run-agent" id="btnRunAgent" onclick="showRunAgentDialog()">▶ 运行</button>
+                    <button class="btn-stop-agent" id="btnStopAgent" onclick="stopCurrentAgent()" disabled>⏹ 停止</button>
+                </div>
+                <!-- 运行任务输入框 -->
+                <div class="run-task-dialog" id="runTaskDialog" style="display: none;">
+                    <input type="text" id="taskInput" placeholder="输入任务描述...">
+                    <button onclick="runAgentWithTask()">确认</button>
+                </div>
+            </div>
+            
+            <!-- 话题列表 -->
+            <div class="topics-sidebar">
+                <div class="sidebar-header">
+                    <h2>📚 话题</h2>
+                    <button class="btn-add-topic" onclick="addNewTopic()" title="添加新话题">+</button>
+                </div>
+                <div class="topics-list" id="topicsList">
+                    <!-- 话题将动态添加到这里 -->
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="script.js"></script>
+</body>
+</html>
