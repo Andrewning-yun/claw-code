@@ -74,6 +74,63 @@ body {
     background: #159785;
 }
 
+.header-actions {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+}
+
+.server-connect {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+#serverUrlInput {
+    width: 300px;
+    max-width: 42vw;
+    border: 1px solid rgba(255, 255, 255, 0.35);
+    border-radius: 999px;
+    background: rgba(255, 255, 255, 0.12);
+    color: #fff;
+    padding: 8px 12px;
+    outline: none;
+}
+
+#serverUrlInput::placeholder {
+    color: rgba(255, 255, 255, 0.7);
+}
+
+#serverUrlInput:focus {
+    border-color: rgba(255, 255, 255, 0.8);
+}
+
+.btn-connect-server {
+    padding: 8px 14px;
+    border: 1px solid rgba(255, 255, 255, 0.35);
+    border-radius: 999px;
+    background: rgba(255, 255, 255, 0.12);
+    color: #fff;
+    cursor: pointer;
+}
+
+.btn-connect-server:hover {
+    background: rgba(255, 255, 255, 0.22);
+}
+
+.server-status {
+    font-size: 0.85rem;
+    color: rgba(255, 255, 255, 0.85);
+}
+
+.server-status.connected {
+    color: #9cf6d1;
+}
+
+.server-status.error {
+    color: #ffd0d0;
+}
+
 /* 消息区域 */
 .chat-messages {
     flex: 1;
