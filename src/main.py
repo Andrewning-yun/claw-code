@@ -16,6 +16,7 @@ from .session_store import load_session
 from .setup import run_setup
 from .tool_pool import assemble_tool_pool
 from .tools import execute_tool, get_tool, get_tools, render_tool_index
+from .web_frontend import main as run_web_frontend
 
 
 def build_parser() -> argparse.ArgumentParser:
@@ -88,6 +89,10 @@ def build_parser() -> argparse.ArgumentParser:
     exec_tool_parser = subparsers.add_parser('exec-tool', help='execute a mirrored tool shim by exact name')
     exec_tool_parser.add_argument('name')
     exec_tool_parser.add_argument('payload')
+
+    web_parser = subparsers.add_parser('web-ui', help='run a browser chat UI with subagent monitoring')
+    web_parser.add_argument('--host', default='127.0.0.1')
+    web_parser.add_argument('--port', type=int, default=8080)
     return parser
 
 
@@ -205,6 +210,9 @@ def main(argv: list[str] | None = None) -> int:
         result = execute_tool(args.name, args.payload)
         print(result.message)
         return 0 if result.handled else 1
+    if args.command == 'web-ui':
+        run_web_frontend(['--host', args.host, '--port', str(args.port)])
+        return 0
     parser.error(f'unknown command: {args.command}')
     return 2
 
